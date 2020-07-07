@@ -69,8 +69,12 @@ stationssub = subset(stations, id == "22")
 stationssub
 
 #1. Use merge (twice) to append the appropriate station names to the trips data frame. Add a column for the starting station and the ending station. See ?merge.
-merge
-
+merged_data <- merge(trips, stations_ex, by.x = "strt_statn", by.y = "id" )
+merged_data
+start_end <- merge(merged_data, stations_ex, by.x = "end_statn", by.y = "id" )
+start_end
+summary(start_end)
+ 
 
 #Look at the summary of this new data frame. Are all of the stations "existing"? Why is that? Did you merge using your hubway station data frame with only existing stations? Or the data frame with all stations?  Remove all trips to or from a "removed" station if necessary.
 
@@ -78,3 +82,41 @@ merge
 
 
 #2. Use names() or colnames() to clean up the column names in the merged data frame.
+colnames(start_end) [colnames(start_end) == "end_statn"] <- "end_station"
+head(start_end)
+
+#3. Which station is most frequently used as a starting station?
+  
+most_used <- table(start_end$strt_statn)
+which.max (most_used)
+
+#Station 22 is the most frequently used.
+  
+  
+  
+  
+#4. Which station is most frequently used as an ending station?
+  
+most_used_end <- table(start_end$end_station)
+which.max (most_used_end)
+
+# Station 22 is the most frequently used.  
+  
+  
+  
+#5. What is the name of the starting station with the longest average trip duration? Hint: tapply or aggregate
+station_longduration <- aggregate(merged_data$duration, by = list(merged_data$strt_statn), FUN = sum)
+which.max(station_longduration)
+
+
+
+
+#6. What is the name of the starting station with the shortest average trip duration?
+  
+  
+  
+  
+  
+  
+#7. What is the name of the ending station with the longest and shortest average trip duration?
+  
